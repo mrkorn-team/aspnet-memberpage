@@ -1,0 +1,36 @@
+@page
+@model YOURData.Pages.Members.IndexModel
+@{
+  ViewData["Title"] = "Members";
+}
+
+<div class="container mt-4">
+  <h2>Members List</h2>
+
+  <div class="card shadow rounded">
+    <div class="card-body p-3">
+      <!-- Scrollable wrapper -->
+      <div id="members-table-wrapper">
+      <table class="table mb-0" id="members-table">
+        <thead class="table-light sticky-top">
+          <tr>
+            <th style="width: 50px;">Picture</th>
+            <th style="width: 150px; text-align:left;">Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- JS will populate -->
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/members.js" asp-append-version="true"></script>
+}
+@section Styles {
+  <link href="~/css/members.css" asp-append-version="true" rel="stylesheet" />
+}

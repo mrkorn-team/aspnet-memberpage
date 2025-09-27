@@ -1,0 +1,22 @@
+/* Force alternating row colors */
+#members-table tbody tr:hover td {
+  background-color: #e2f0ff !important;
+  transition: background-color 0.2s;
+}
+#members-table-wrapper {
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #aaa #f0f0f0;
+}
+#members-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+#members-table-wrapper::-webkit-scrollbar-thumb {
+    background-color: #aaa;
+    border-radius: 4px;
+}
+#members-table td,
+#members-table th {
+  vertical-align: middle;
+}
