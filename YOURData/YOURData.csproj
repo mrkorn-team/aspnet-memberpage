@@ -13,6 +13,7 @@
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <FileVersion>1.0.0</FileVersion>
     <InformationalVersion>250919T1232</InformationalVersion>
+    <UserSecretsId>b6d89992-2310-4ad1-b525-e46ea8cb2dad</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
