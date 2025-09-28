@@ -129,7 +129,7 @@ class MembersIndex {
   addHoverTooltip() {
     const imgs = document.querySelectorAll("#members-table-body img");
     imgs.forEach(img => {
-      img.addEventListener('mouseenter', e => {
+      img.addEventListener('mouseenter', () => {
         const src = img.dataset.picture;
         const name = img.dataset.name;
 
@@ -137,15 +137,16 @@ class MembersIndex {
         const maxTooltipWidth = cardRect.width - 20;
         const maxTooltipHeight = Math.min(cardRect.height - 20, 150);
 
+        // Tooltip content
         this.tooltipDiv.innerHTML = `
-                    <img src="${src}" 
-                         style="
-                             max-width:${maxTooltipWidth}px; 
-                             max-height:${maxTooltipHeight}px; 
-                             object-fit:cover; 
-                             border-radius:8px;">
-                    <div style="text-align:center; margin-top:5px;">${name}</div>
-                `;
+                <img src="${src}" 
+                     style="
+                        max-width:${maxTooltipWidth}px; 
+                        max-height:${maxTooltipHeight}px; 
+                        object-fit:cover; 
+                        border-radius:8px;">
+                <div style="text-align:center; margin-top:5px;">${name}</div>
+            `;
         this.tooltipDiv.style.display = 'block';
       });
 
@@ -155,14 +156,26 @@ class MembersIndex {
 
       img.addEventListener('mousemove', e => {
         const tooltipRect = this.tooltipDiv.getBoundingClientRect();
-        let left = e.pageX + 10;
-        let top = e.pageY + 10;
+        const scrollX = window.scrollX || window.pageXOffset;
+        const scrollY = window.scrollY || window.pageYOffset;
 
-        if (left + tooltipRect.width > window.scrollX + window.innerWidth) {
+        let left = e.pageX + 10;  // default: right of cursor
+        let top = e.pageY + 10;   // default: below cursor
+
+        // Smart horizontal positioning
+        if (left + tooltipRect.width > scrollX + window.innerWidth) {
           left = e.pageX - tooltipRect.width - 10;
         }
-        if (top + tooltipRect.height > window.scrollY + window.innerHeight) {
+        if (left < scrollX) {
+          left = scrollX + 5;
+        }
+
+        // Smart vertical positioning
+        if (top + tooltipRect.height > scrollY + window.innerHeight) {
           top = e.pageY - tooltipRect.height - 10;
+        }
+        if (top < scrollY) {
+          top = scrollY + 5;
         }
 
         this.tooltipDiv.style.left = left + 'px';

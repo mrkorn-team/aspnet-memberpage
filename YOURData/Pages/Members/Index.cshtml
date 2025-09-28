@@ -4,10 +4,6 @@
   ViewData["Title"] = "Members";
 }
 
-<style>
-  
-</style>
-
 <div class="container mt-4">
   <h2>Members List</h2>
 
@@ -31,35 +27,39 @@
         </nav>
       </div>
 
-      <!-- Table Header -->
-      <table class="table mb-0" id="members-table-header" style="table-layout: fixed; width:100%;">
-        <colgroup>
-          <col style="width:70px;">
-          <col style="width:150px;">
-          <col>
-        </colgroup>
-        <thead class="sticky-top">
-          <tr>
-            <th style="text-align:center;">Picture</th>
-            <th>Name</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-      </table>
-
-      <!-- Scrollable Table Body -->
-      <div style="max-height:500px; overflow-y:auto;">
-        <table class="table mb-0" id="members-table-body" style="table-layout: fixed; width:100%;">
+      <!-- Scrollable wrapper -->
+      <div id="members-table-wrapper">
+        <!-- Table Header -->
+        <table class="table mb-0" id="members-table-header" style="table-layout: fixed; width:100%;">
           <colgroup>
             <col style="width:70px;">
             <col style="width:150px;">
             <col>
           </colgroup>
-          <tbody>
-            <!-- JS populates rows -->
-          </tbody>
+          <thead class="sticky-top">
+            <tr>
+              <th style="text-align:center;">Picture</th>
+              <th>Name</th>
+              <th>Action</th>
+            </tr>
+          </thead>
         </table>
+
+        <!-- Scrollable Table Body -->
+        <div style="max-height:500px; overflow-y:auto;">
+          <table class="table mb-0" id="members-table-body" style="table-layout: fixed; width:100%;">
+            <colgroup>
+              <col style="width:70px;">
+              <col style="width:150px;">
+              <col>
+            </colgroup>
+            <tbody>
+              <!-- JS populates rows -->
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
