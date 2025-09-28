@@ -87,7 +87,7 @@
 /* === Pagination Styling === */
 #pagination-controls {
   display: flex;
-  gap: 0.22rem;
+  gap: 0.25rem;
   list-style: none;
   padding-left: 0;
   margin: 0;
@@ -142,6 +142,7 @@
   #pagination-controls .page-item.active .page-link {
     background-color: var(--bs-primary);
     color: var(--bs-body-bg);
+    border: 1px solid #0d6efd;
   }
 
 [data-bs-theme=dark] #pagination-controls .page-item.active .page-link {
