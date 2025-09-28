@@ -15,9 +15,3 @@ public class IndexModel : PageModel
 
   public void OnGet() { }
 }
-
-// test tortoisegit
-// recommit again 2
-// feature-edit-page-1
-// master change 1
-// master change 2

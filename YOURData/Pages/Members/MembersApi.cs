@@ -16,14 +16,29 @@ public static partial class MembersApi
       var users = await db.Users
         .Select(u => new { u.Id, u.Name, u.Picture })
         .ToListAsync();
-      return Results.Ok(users);
+      return Results.Ok(users);  // returns an array of user objects
     });
   }
 }
 
-
 public static partial class MembersApi
 {
+  public static void MapMembersApi_v3(this WebApplication app)
+  {
+    app.MapGet("/api/members", async (AppDbContext db, int page = 1, int pageSize = 10) =>
+    {
+      var users = await db.Users
+        .OrderBy(u => u.Name)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(u => new { u.Id, u.Name, u.Picture })
+        .ToListAsync();
+
+      var totalCount = await db.Users.CountAsync();
+      return Results.Ok(new { users, totalCount });
+    });
+  }
+
   public static void MapMembersApi_v2(this WebApplication app)
   {
     // GET /api/users?pageIndex=1&pageSize=5
@@ -96,11 +111,7 @@ public static partial class MembersApi
       return Results.Json(new { success = true, user = new { user.Id, user.Name, user.Picture } });
     });
   }
-}
 
-// API Endpoints
-public static partial class MembersApi
-{
   // ... after app.UseStaticFiles(); and after app is built
   public static void MapMembersApi_v1(this WebApplication app)
   {

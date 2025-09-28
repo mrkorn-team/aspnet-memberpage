@@ -1,22 +1,63 @@
-/* Force alternating row colors */
-#members-table tbody tr:hover td {
-  background-color: #e2f0ff !important;
-  transition: background-color 0.2s;
-}
+/* ---------------------------------------------
+   Members Page CSS
+----------------------------------------------- */
+
+/* Table wrapper + custom scrollbar */
 #members-table-wrapper {
-    max-height: 500px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #aaa #f0f0f0;
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #aaa #f0f0f0; /* Firefox */
 }
-#members-table-wrapper::-webkit-scrollbar {
+
+  #members-table-wrapper::-webkit-scrollbar {
     width: 8px;
-}
-#members-table-wrapper::-webkit-scrollbar-thumb {
+  }
+
+  #members-table-wrapper::-webkit-scrollbar-thumb {
     background-color: #aaa;
     border-radius: 4px;
+  }
+
+/* Card wrapper for members table */
+.members-card {
+  position: relative;
+  z-index: 1; /* below sidebar */
 }
-#members-table td,
-#members-table th {
+
+/* Sticky table header */
+#members-table-header thead,
+#members-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10; /* below sidebar */
+  background-color: #e9ecef;
+}
+
+/* Alternating row colors */
+#members-table-body tbody tr:nth-child(even) td {
+  background-color: #f9f9f9;
+}
+
+#members-table-body tbody tr:nth-child(odd) td {
+  background-color: #ffffff;
+}
+
+/* Hover effect with smooth transition */
+#members-table-body tbody tr:hover td,
+#members-table tbody tr:hover td {
+  background-color: #e2f0ff;
+  transition: background-color 0.2s;
+}
+
+/* Center the picture column */
+#members-table-header th:first-child,
+#members-table-body td:first-child {
+  text-align: center;
+}
+
+/* Align Name and Action vertically center */
+#members-table-body td:nth-child(n+2),
+#members-table-header th:nth-child(n+2) {
   vertical-align: middle;
 }

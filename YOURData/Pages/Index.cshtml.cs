@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace YOURData.Pages;
@@ -12,8 +13,8 @@ public class IndexModel : PageModel
     _logger = logger;
   }
 
-  public void OnGet()
+  public IActionResult OnGet()
   {
-    var isAuthened = User?.Identity?.IsAuthenticated;
+    return RedirectToPage("/members/index");
   }
 }

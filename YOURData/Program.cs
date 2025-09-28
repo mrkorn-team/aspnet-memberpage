@@ -1,14 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using System.IO;
-using YOURData; // adjust to your root namespace
-using YOURData.Models;
+using System.Security.Claims; // where AppDbContext is
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims; // where AppDbContext is
+using Microsoft.EntityFrameworkCore;
+using YOURData.Models;
 
 // ===============================================
 // My razor template w/ sidebars 'n simple sign-in

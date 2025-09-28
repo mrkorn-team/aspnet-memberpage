@@ -1,28 +1,64 @@
 @page
-@model YOURData.Pages.Members.IndexModel
+@model IndexModel
 @{
   ViewData["Title"] = "Members";
 }
 
+<style>
+  
+</style>
+
 <div class="container mt-4">
   <h2>Members List</h2>
 
-  <div class="card shadow rounded">
+  <div class="card shadow rounded members-card">
     <div class="card-body p-3">
-      <!-- Scrollable wrapper -->
-      <div id="members-table-wrapper">
-      <table class="table mb-0" id="members-table">
-        <thead class="table-light sticky-top">
+
+      <!-- Page size selector + pagination -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          Show
+          <select id="page-size-select" class="form-select d-inline-block w-auto">
+            <option value="1">1</option>
+            <option value="5" selected>5</option>
+            <option value="15">15</option>
+            <option value="25">25</option>
+          </select>
+          per page
+        </div>
+        <nav>
+          <ul class="pagination mb-0" id="pagination-controls"></ul>
+        </nav>
+      </div>
+
+      <!-- Table Header -->
+      <table class="table mb-0" id="members-table-header" style="table-layout: fixed; width:100%;">
+        <colgroup>
+          <col style="width:70px;">
+          <col style="width:150px;">
+          <col>
+        </colgroup>
+        <thead class="sticky-top">
           <tr>
-            <th style="width: 50px;">Picture</th>
-            <th style="width: 150px; text-align:left;">Name</th>
+            <th style="text-align:center;">Picture</th>
+            <th>Name</th>
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- JS will populate -->
-        </tbody>
       </table>
+
+      <!-- Scrollable Table Body -->
+      <div style="max-height:500px; overflow-y:auto;">
+        <table class="table mb-0" id="members-table-body" style="table-layout: fixed; width:100%;">
+          <colgroup>
+            <col style="width:70px;">
+            <col style="width:150px;">
+            <col>
+          </colgroup>
+          <tbody>
+            <!-- JS populates rows -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

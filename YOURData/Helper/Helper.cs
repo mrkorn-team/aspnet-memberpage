@@ -67,7 +67,8 @@ public static class core
         var assemply = Assembly.GetEntryAssembly();
         if (assemply is not null && assemply.IsDefined(typeof(AssemblyInformationalVersionAttribute)))
         {
-          _informationVersion = assemply.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+          _informationVersion = assemply.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+            .InformationalVersion.Split("+").First();
         }
       }
       return _informationVersion;

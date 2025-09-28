@@ -1,37 +1,59 @@
 class MembersIndex {
   constructor() {
-    this.tableBody = document.querySelector("#members-table tbody");
-    this.card = document.querySelector(".card");
+    this.tableBody = document.querySelector("#members-table-body tbody");
+    this.card = document.querySelector(".members-card");
     this.tooltipDiv = null;
+
+    this.users = [];
+    this.currentPage = 1;
+    this.pageSize = 5;
+
+    this.pageSizeSelect = document.getElementById("page-size-select");
+    this.paginationControls = document.getElementById("pagination-controls");
+
     this.init();
   }
 
   async init() {
-    const users = await this.fetchUsers();
-    this.render(users);
+    this.users = await this.fetchUsers();
+
     this.createTooltip();
+    this.renderPage();
+
+    this.pageSizeSelect.addEventListener("change", () => {
+      this.pageSize = parseInt(this.pageSizeSelect.value);
+      this.currentPage = 1;
+      this.renderPage();
+    });
   }
 
   async fetchUsers() {
     try {
       const res = await fetch('/api/members');
-      return await res.json();
+      const data = await res.json();
+      return data; // assumes API returns array of users
     } catch (err) {
       console.error(err);
       return [];
     }
   }
 
-  render(users) {
+  renderPage() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    const pageUsers = this.users.slice(startIndex, endIndex);
+
+    this.renderRows(pageUsers);
+    this.renderPaginationControls();
+  }
+
+  renderRows(users) {
     this.tableBody.innerHTML = '';
-    users.forEach((u, index) => {
+    users.forEach((u) => {
       const tr = document.createElement('tr');
 
-      // alternating row colors
-      const bgColor = index % 2 === 0 ? '#f0f0f0' : '#ffffff';
-
       tr.innerHTML = `
-                <td>
+                <td class="text-center">
                     <img src="${u.picture}" 
                          alt="${u.name}" 
                          class="rounded-circle" 
@@ -40,17 +62,53 @@ class MembersIndex {
                          data-name="${u.name}" 
                          data-picture="${u.picture}">
                 </td>
-                <td style="text-align:left;">${u.name || ''}</td>
-                <td><a href="/Members/Edit/${u.id}">Edit</a></td>
+                <td class="align-middle">${u.name || ''}</td>
+                <td class="align-middle"><a href="/Members/Edit/${u.id}">Edit</a></td>
             `;
-
-      // apply background to td
-      tr.querySelectorAll('td').forEach(td => td.style.backgroundColor = bgColor);
-
       this.tableBody.appendChild(tr);
     });
 
     this.addHoverTooltip();
+  }
+
+  renderPaginationControls() {
+    this.paginationControls.innerHTML = '';
+    const totalPages = Math.ceil(this.users.length / this.pageSize);
+    const maxVisiblePages = 7;
+
+    const createPageItem = (text, page, disabled = false, active = false) => {
+      const li = document.createElement('li');
+      li.className = `page-item ${active ? 'active' : ''} ${disabled ? 'disabled' : ''}`;
+      li.innerHTML = `<a class="page-link" href="#">${text}</a>`;
+      if (!disabled) {
+        li.addEventListener('click', e => {
+          e.preventDefault();
+          this.currentPage = page;
+          this.renderPage();
+        });
+      }
+      return li;
+    };
+
+    // First & Prev
+    this.paginationControls.appendChild(createPageItem('<<', 1, this.currentPage === 1));
+    this.paginationControls.appendChild(createPageItem('<', Math.max(1, this.currentPage - 1), this.currentPage === 1));
+
+    // Page window
+    let start = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+    let end = start + maxVisiblePages - 1;
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(1, end - maxVisiblePages + 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      this.paginationControls.appendChild(createPageItem(i, i, false, i === this.currentPage));
+    }
+
+    // Next & Last
+    this.paginationControls.appendChild(createPageItem('>', Math.min(totalPages, this.currentPage + 1), this.currentPage === totalPages));
+    this.paginationControls.appendChild(createPageItem('>>', totalPages, this.currentPage === totalPages));
   }
 
   createTooltip() {
@@ -69,13 +127,12 @@ class MembersIndex {
   }
 
   addHoverTooltip() {
-    const imgs = document.querySelectorAll("#members-table img");
+    const imgs = document.querySelectorAll("#members-table-body img");
     imgs.forEach(img => {
       img.addEventListener('mouseenter', e => {
         const src = img.dataset.picture;
         const name = img.dataset.name;
 
-        // Calculate max tooltip size based on card
         const cardRect = this.card.getBoundingClientRect();
         const maxTooltipWidth = cardRect.width - 20;
         const maxTooltipHeight = Math.min(cardRect.height - 20, 150);
@@ -89,8 +146,6 @@ class MembersIndex {
                              border-radius:8px;">
                     <div style="text-align:center; margin-top:5px;">${name}</div>
                 `;
-        this.tooltipDiv.style.left = e.pageX + 10 + 'px';
-        this.tooltipDiv.style.top = e.pageY + 10 + 'px';
         this.tooltipDiv.style.display = 'block';
       });
 
@@ -99,12 +154,23 @@ class MembersIndex {
       });
 
       img.addEventListener('mousemove', e => {
-        this.tooltipDiv.style.left = e.pageX + 10 + 'px';
-        this.tooltipDiv.style.top = e.pageY + 10 + 'px';
+        const tooltipRect = this.tooltipDiv.getBoundingClientRect();
+        let left = e.pageX + 10;
+        let top = e.pageY + 10;
+
+        if (left + tooltipRect.width > window.scrollX + window.innerWidth) {
+          left = e.pageX - tooltipRect.width - 10;
+        }
+        if (top + tooltipRect.height > window.scrollY + window.innerHeight) {
+          top = e.pageY - tooltipRect.height - 10;
+        }
+
+        this.tooltipDiv.style.left = left + 'px';
+        this.tooltipDiv.style.top = top + 'px';
       });
     });
   }
 }
 
-// Initialize
+// Initialize after DOM loaded
 document.addEventListener('DOMContentLoaded', () => new MembersIndex());
