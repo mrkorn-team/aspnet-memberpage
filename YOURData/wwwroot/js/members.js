@@ -141,42 +141,38 @@ class MembersIndex {
     let fadeOutTimeout = null;
 
     imgs.forEach(img => {
-      img.setAttribute('aria-describedby', 'member-tooltip');
-      img.setAttribute('tabindex', '0'); // allow keyboard focus
+      img.setAttribute("aria-describedby", "member-tooltip");
+      img.setAttribute("tabindex", "0"); // keyboard focus
 
       const showTooltip = (e) => {
         const src = img.dataset.picture;
         const name = img.dataset.name;
 
-        const cardRect = this.card.getBoundingClientRect();
-        const maxTooltipWidth = cardRect.width - 20;
-        const maxTooltipHeight = Math.min(cardRect.height - 20, 150);
-
-        if (fadeOutTimeout) {
-          clearTimeout(fadeOutTimeout);
-          fadeOutTimeout = null;
-        }
-
+        // Preload image
         this.tooltipImg.src = src;
-        this.tooltipImg.style.maxWidth = maxTooltipWidth + 'px';
-        this.tooltipImg.style.maxHeight = maxTooltipHeight + 'px';
         this.tooltipName.textContent = name;
 
         this.positionTooltip(e);
-        this.tooltipDiv.classList.add('show');
+
+        // Show with fade
+        this.tooltipDiv.classList.add("show");
       };
 
       const hideTooltip = () => {
         fadeOutTimeout = setTimeout(() => {
-          this.tooltipDiv.classList.remove('show');
+          this.tooltipDiv.classList.remove("show");
+
+          // Move offscreen after fade
+          this.tooltipDiv.style.top = "-9999px";
+          this.tooltipDiv.style.left = "-9999px";
         }, 80);
       };
 
-      img.addEventListener('mouseenter', showTooltip);
-      img.addEventListener('mouseleave', hideTooltip);
-      img.addEventListener('focus', showTooltip);
-      img.addEventListener('blur', hideTooltip);
-      img.addEventListener('mousemove', (e) => {
+      img.addEventListener("mouseenter", showTooltip);
+      img.addEventListener("mouseleave", hideTooltip);
+      img.addEventListener("focus", showTooltip);
+      img.addEventListener("blur", hideTooltip);
+      img.addEventListener("mousemove", (e) => {
         if (fadeOutTimeout) {
           clearTimeout(fadeOutTimeout);
           fadeOutTimeout = null;
@@ -204,9 +200,10 @@ class MembersIndex {
     }
     if (top < scrollY) top = scrollY + 5;
 
-    this.tooltipDiv.style.left = left + 'px';
-    this.tooltipDiv.style.top = top + 'px';
+    this.tooltipDiv.style.left = left + "px";
+    this.tooltipDiv.style.top = top + "px";
   }
+
 
   // =======================
   // Custom Select Integration
