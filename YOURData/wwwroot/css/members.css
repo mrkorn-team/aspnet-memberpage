@@ -81,5 +81,51 @@
 
 /* Pagination styles */
 #pagination-controls .page-link {
-  text-decoration: none; /* remove underline */
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 2rem; /* fixed height */
+  min-width: 2rem; /* optional, keeps them square-ish */
+  line-height: 2rem; /* vertical centering */
+  padding: 0 0.5rem; /* horizontal spacing */
+  border-radius: 0; /* reset default radius */
+}
+
+/* Apply radius only to first & last buttons */
+#pagination-controls .page-item:first-child .page-link {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+#pagination-controls .page-item:last-child .page-link {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+/* Chevron buttons */
+#pagination-controls .page-item:first-child .page-link,
+#pagination-controls .page-item:nth-child(2) .page-link,
+#pagination-controls .page-item:last-child .page-link,
+#pagination-controls .page-item:nth-last-child(2) .page-link {
+  font-size: 1.2rem;
+  padding-bottom: .15rem;
+}
+
+/* Number buttons */
+#pagination-controls .page-item:not(:first-child):not(:nth-child(2)):not(:nth-last-child(2)):not(:last-child) .page-link {
+  font-size: .875rem;
+  padding-top: .175rem;
+}
+
+/* Optional: active page highlight */
+#pagination-controls .page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Optional hover effect for all page links */
+#pagination-controls .page-link:hover {
+  background-color: #e9ecef;
 }
