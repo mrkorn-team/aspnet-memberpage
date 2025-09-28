@@ -78,3 +78,8 @@
     text-align: center;
     margin-top: 5px;
 }
+
+/* Pagination styles */
+#pagination-controls .page-link {
+  text-decoration: none; /* remove underline */
+}
