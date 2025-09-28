@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using YOURData.Models;
 
 namespace YOURData.Pages.Members;

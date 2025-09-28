@@ -2,7 +2,10 @@ class MembersIndex {
   constructor() {
     this.tableBody = document.querySelector("#members-table-body tbody");
     this.card = document.querySelector(".members-card");
+
     this.tooltipDiv = null;
+    this.tooltipImg = null;
+    this.tooltipName = null;
 
     this.users = [];
     this.currentPage = 1;
@@ -53,19 +56,22 @@ class MembersIndex {
       const tr = document.createElement('tr');
 
       tr.innerHTML = `
-                <td class="text-center">
-                    <img src="${u.picture}" 
-                         alt="${u.name}" 
-                         class="rounded-circle" 
-                         width="32" height="32" 
-                         style="cursor:pointer; object-fit:cover;"
-                         data-name="${u.name}" 
-                         data-picture="${u.picture}">
-                </td>
-                <td class="align-middle">${u.name || ''}</td>
-                <td class="align-middle"><a href="/Members/Edit/${u.id}">Edit</a></td>
-            `;
+        <td class="text-center">
+            <img src="${u.picture}" 
+                 alt="${u.name}" 
+                 class="rounded-circle" 
+                 width="32" height="32" 
+                 style="cursor:pointer; object-fit:cover;"
+                 data-name="${u.name}" 
+                 data-picture="${u.picture}">
+        </td>
+        <td class="align-middle">${u.name || ''}</td>
+        <td class="align-middle"><a href="/Members/Edit/${u.id}">Edit</a></td>
+      `;
       this.tableBody.appendChild(tr);
+
+      // Preload big photo for smooth hover
+      new Image().src = u.picture;
     });
 
     this.addHoverTooltip();
@@ -115,14 +121,28 @@ class MembersIndex {
     if (!this.tooltipDiv) {
       this.tooltipDiv = document.createElement('div');
       this.tooltipDiv.id = 'member-tooltip';
+      this.tooltipDiv.setAttribute('role', 'tooltip');
+
+      this.tooltipImg = document.createElement('img');
+      this.tooltipDiv.appendChild(this.tooltipImg);
+
+      this.tooltipName = document.createElement('div');
+      this.tooltipDiv.appendChild(this.tooltipName);
+
       document.body.appendChild(this.tooltipDiv);
     }
   }
 
   addHoverTooltip() {
     const imgs = document.querySelectorAll("#members-table-body img");
+    let fadeOutTimeout = null;
+
     imgs.forEach(img => {
-      img.addEventListener('mouseenter', e => {
+      // Add ARIA attribute
+      img.setAttribute('aria-describedby', 'member-tooltip');
+      img.setAttribute('tabindex', '0'); // allow keyboard focus
+
+      const showTooltip = (e) => {
         const src = img.dataset.picture;
         const name = img.dataset.name;
 
@@ -130,56 +150,64 @@ class MembersIndex {
         const maxTooltipWidth = cardRect.width - 20;
         const maxTooltipHeight = Math.min(cardRect.height - 20, 150);
 
-        this.tooltipDiv.innerHTML = `
-          <img src="${src}" 
-               style="
-                   max-width:${maxTooltipWidth}px; 
-                   max-height:${maxTooltipHeight}px; 
-                   object-fit:cover; 
-                   border-radius:8px;">
-          <div style="text-align:center; margin-top:5px;">${name}</div>
-        `;
+        if (fadeOutTimeout) {
+          clearTimeout(fadeOutTimeout);
+          fadeOutTimeout = null;
+        }
 
-        this.tooltipDiv.style.left = e.pageX + 10 + 'px';
-        this.tooltipDiv.style.top = e.pageY + 10 + 'px';
+        this.tooltipImg.src = src;
+        this.tooltipImg.style.maxWidth = maxTooltipWidth + 'px';
+        this.tooltipImg.style.maxHeight = maxTooltipHeight + 'px';
+        this.tooltipName.textContent = name;
 
+        this.positionTooltip(e);
         this.tooltipDiv.classList.add('show');
-      });
+      };
 
-      img.addEventListener('mouseleave', () => {
-        this.tooltipDiv.classList.remove('show');
-      });
+      const hideTooltip = () => {
+        fadeOutTimeout = setTimeout(() => {
+          this.tooltipDiv.classList.remove('show');
+        }, 80);
+      };
 
-      img.addEventListener('mousemove', e => {
-        const tooltipRect = this.tooltipDiv.getBoundingClientRect();
-        const scrollX = window.scrollX || window.pageXOffset;
-        const scrollY = window.scrollY || window.pageYOffset;
+      img.addEventListener('mouseenter', showTooltip);
+      img.addEventListener('mouseleave', hideTooltip);
 
-        let left = e.pageX + 10;  // default: right of cursor
-        let top = e.pageY + 10;   // default: below cursor
+      img.addEventListener('focus', showTooltip);   // keyboard focus
+      img.addEventListener('blur', hideTooltip);    // keyboard blur
 
-        // Smart horizontal positioning
-        if (left + tooltipRect.width > scrollX + window.innerWidth) {
-          left = e.pageX - tooltipRect.width - 10;
+      img.addEventListener('mousemove', (e) => {
+        if (fadeOutTimeout) {
+          clearTimeout(fadeOutTimeout);
+          fadeOutTimeout = null;
         }
-        if (left < scrollX) {
-          left = scrollX + 5;
-        }
-
-        // Smart vertical positioning
-        if (top + tooltipRect.height > scrollY + window.innerHeight) {
-          top = e.pageY - tooltipRect.height - 10;
-        }
-        if (top < scrollY) {
-          top = scrollY + 5;
-        }
-
-        this.tooltipDiv.style.left = left + 'px';
-        this.tooltipDiv.style.top = top + 'px';
+        this.positionTooltip(e);
       });
     });
   }
+
+  positionTooltip(e) {
+    const tooltipRect = this.tooltipDiv.getBoundingClientRect();
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    let left = e.pageX + 10;
+    let top = e.pageY + 10;
+
+    if (left + tooltipRect.width > scrollX + window.innerWidth) {
+      left = e.pageX - tooltipRect.width - 10;
+    }
+    if (left < scrollX) left = scrollX + 5;
+
+    if (top + tooltipRect.height > scrollY + window.innerHeight) {
+      top = e.pageY - tooltipRect.height - 10;
+    }
+    if (top < scrollY) top = scrollY + 5;
+
+    this.tooltipDiv.style.left = left + 'px';
+    this.tooltipDiv.style.top = top + 'px';
+  }
 }
 
-// Initialize after DOM loaded
+// Initialize
 document.addEventListener('DOMContentLoaded', () => new MembersIndex());
