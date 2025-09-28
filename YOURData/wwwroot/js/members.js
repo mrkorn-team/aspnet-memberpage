@@ -48,13 +48,13 @@ class MembersIndex {
     const pageUsers = this.users.slice(startIndex, endIndex);
 
     this.renderRows(pageUsers);
-    this.renderPaginationControls();
+    this.renderPaginationControls(this.users);
   }
 
-  renderRows(users) {
+  renderRows(pageUsers) {
     if (!this.tableBody) return;
     this.tableBody.innerHTML = '';
-    users.forEach(u => {
+    pageUsers.forEach(u => {
       const tr = document.createElement('tr');
 
       tr.innerHTML = `
@@ -79,10 +79,10 @@ class MembersIndex {
     this.addHoverTooltip();
   }
 
-  renderPaginationControls() {
+  renderPaginationControls(users) {
     if (!this.paginationControls) return;
     this.paginationControls.innerHTML = '';
-    const totalPages = Math.ceil(this.users.length / this.pageSize);
+    const totalPages = Math.ceil(users.length / this.pageSize);
     const maxVisiblePages = 7;
 
     const createPageItem = (text, page, disabled = false, active = false) => {
@@ -148,31 +148,36 @@ class MembersIndex {
         const src = img.dataset.picture;
         const name = img.dataset.name;
 
-        // Preload image
+        const cardRect = this.card.getBoundingClientRect();
+        const maxTooltipWidth = cardRect.width - 20;
+        const maxTooltipHeight = Math.min(cardRect.height - 20, 150);
+
+        if (fadeOutTimeout) {
+          clearTimeout(fadeOutTimeout);
+          fadeOutTimeout = null;
+        }
+
         this.tooltipImg.src = src;
+        this.tooltipImg.style.maxWidth = maxTooltipWidth + 'px';
+        this.tooltipImg.style.maxHeight = maxTooltipHeight + 'px';
         this.tooltipName.textContent = name;
 
         this.positionTooltip(e);
-
-        // Show with fade
-        this.tooltipDiv.classList.add("show");
+        this.tooltipDiv.classList.add('show');
       };
 
       const hideTooltip = () => {
         fadeOutTimeout = setTimeout(() => {
-          this.tooltipDiv.classList.remove("show");
-
-          // Move offscreen after fade
-          this.tooltipDiv.style.top = "-9999px";
-          this.tooltipDiv.style.left = "-9999px";
+          this.tooltipDiv.classList.remove('show');
         }, 80);
       };
 
-      img.addEventListener("mouseenter", showTooltip);
-      img.addEventListener("mouseleave", hideTooltip);
-      img.addEventListener("focus", showTooltip);
-      img.addEventListener("blur", hideTooltip);
-      img.addEventListener("mousemove", (e) => {
+      img.addEventListener('mouseenter', showTooltip);
+      img.addEventListener('mouseleave', hideTooltip);
+      img.addEventListener('focus', showTooltip);
+      img.addEventListener('blur', hideTooltip);
+
+      img.addEventListener('mousemove', (e) => {
         if (fadeOutTimeout) {
           clearTimeout(fadeOutTimeout);
           fadeOutTimeout = null;
@@ -203,7 +208,6 @@ class MembersIndex {
     this.tooltipDiv.style.left = left + "px";
     this.tooltipDiv.style.top = top + "px";
   }
-
 
   // =======================
   // Custom Select Integration
