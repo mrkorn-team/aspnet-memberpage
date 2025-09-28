@@ -1,18 +1,17 @@
 /***** members.css - Final Polished Theme-Aware Version *****/
 
 /* === Members Table Styles === */
-#members-table-wrapper {
+#members-table-body-wrapper {
   max-height: 500px;
   overflow-y: auto;
-  scrollbar-width: thin;
   scrollbar-color: rgba(var(--bs-body-color-rgb),0.4) var(--bs-body-bg);
 }
 
-#members-table-wrapper::-webkit-scrollbar {
+#members-table-body-wrapper::-webkit-scrollbar {
   width: 8px;
 }
 
-#members-table-wrapper::-webkit-scrollbar-thumb {
+#members-table-body-wrapper::-webkit-scrollbar-thumb {
   background-color: rgba(var(--bs-body-color-rgb),0.4);
   border-radius: 4px;
 }

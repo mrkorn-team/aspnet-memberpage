@@ -61,7 +61,6 @@ body { background-color: var(--bs-tertiary-bg); }
 .wrapper > .main {
   min-height: calc(100vh - var(--uo-footer-height));
   margin-left: var(--uo-leftbar-width);
-  z-index: 5;
 }
 .wrapper > .footer {
   height: var(--uo-footer-height);

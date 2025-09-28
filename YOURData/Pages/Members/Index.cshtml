@@ -28,7 +28,7 @@
       </div>
 
       <!-- Scrollable wrapper -->
-      <div id="members-table-wrapper">
+      <div id="members-table-header-wrapper">
         <!-- Table Header -->
         <table class="table mb-0" id="members-table-header" style="table-layout: fixed; width:100%;">
           <colgroup>
@@ -44,20 +44,20 @@
             </tr>
           </thead>
         </table>
+      </div>
 
-        <!-- Scrollable Table Body -->
-        <div style="max-height:500px; overflow-y:auto;">
-          <table class="table mb-0" id="members-table-body" style="table-layout: fixed; width:100%;">
-            <colgroup>
-              <col style="width:70px;">
-              <col style="width:150px;">
-              <col>
-            </colgroup>
-            <tbody>
-              <!-- JS populates rows -->
-            </tbody>
-          </table>
-        </div>
+      <!-- Scrollable Table Body -->
+      <div id="members-table-body-wrapper">
+        <table class="table mb-0" id="members-table-body" style="table-layout: fixed; width:100%;">
+          <colgroup>
+            <col style="width:70px;">
+            <col style="width:150px;">
+            <col>
+          </colgroup>
+          <tbody>
+            <!-- JS populates rows -->
+          </tbody>
+        </table>
       </div>
 
       <!-- Member Tooltip (JS will populate content) -->

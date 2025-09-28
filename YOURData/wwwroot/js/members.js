@@ -24,7 +24,7 @@ class MembersIndex {
     this.initCustomSelect(this.pageSizeSelect); // integrate custom select
     this.renderPage();
 
-    this.pageSizeSelect.addEventListener("change", () => {
+    this.pageSizeSelect?.addEventListener("change", () => {
       this.pageSize = parseInt(this.pageSizeSelect.value);
       this.currentPage = 1;
       this.renderPage();
@@ -52,6 +52,7 @@ class MembersIndex {
   }
 
   renderRows(users) {
+    if (!this.tableBody) return;
     this.tableBody.innerHTML = '';
     users.forEach(u => {
       const tr = document.createElement('tr');
@@ -79,6 +80,7 @@ class MembersIndex {
   }
 
   renderPaginationControls() {
+    if (!this.paginationControls) return;
     this.paginationControls.innerHTML = '';
     const totalPages = Math.ceil(this.users.length / this.pageSize);
     const maxVisiblePages = 7;
@@ -210,6 +212,7 @@ class MembersIndex {
   // Custom Select Integration
   // =======================
   initCustomSelect(selectEl) {
+    if (!selectEl) return;
     const options = Array.from(selectEl.options);
     const container = document.createElement('div');
     container.className = 'custom-select';
