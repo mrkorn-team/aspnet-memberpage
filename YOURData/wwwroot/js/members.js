@@ -97,8 +97,8 @@ class MembersIndex {
     };
 
     // First & Prev
-    this.paginationControls.appendChild(createPageItem('<<', 1, this.currentPage === 1));
-    this.paginationControls.appendChild(createPageItem('<', Math.max(1, this.currentPage - 1), this.currentPage === 1));
+    this.paginationControls.appendChild(createPageItem('«', 1, this.currentPage === 1));
+    this.paginationControls.appendChild(createPageItem('‹', Math.max(1, this.currentPage - 1), this.currentPage === 1));
 
     // Page window
     let start = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
@@ -113,8 +113,8 @@ class MembersIndex {
     }
 
     // Next & Last
-    this.paginationControls.appendChild(createPageItem('>', Math.min(totalPages, this.currentPage + 1), this.currentPage === totalPages));
-    this.paginationControls.appendChild(createPageItem('>>', totalPages, this.currentPage === totalPages));
+    this.paginationControls.appendChild(createPageItem('›', Math.min(totalPages, this.currentPage + 1), this.currentPage === totalPages));
+    this.paginationControls.appendChild(createPageItem('»', totalPages, this.currentPage === totalPages));
   }
 
   createTooltip() {
