@@ -12,15 +12,15 @@
 
       <!-- Page size selector + pagination -->
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <div>
-          Show
-          <select id="page-size-select" class="form-select d-inline-block w-auto">
+        <div class="d-flex align-items-center mb-3">
+          <label for="page-size-select" class="me-2 text-nowrap">Page size:</label>
+          <select id="page-size-select" class="form-select form-select-sm" style="z-index:50">
             <option value="1">1</option>
             <option value="5" selected>5</option>
+            <option value="10">10</option>
             <option value="15">15</option>
-            <option value="25">25</option>
+            <option value="20">20</option>
           </select>
-          per page
         </div>
         <nav>
           <ul class="pagination mb-0" id="pagination-controls"></ul>
@@ -60,14 +60,10 @@
         </div>
       </div>
 
-      <div id="tooltip" style="
-          position:absolute;
-          display:none;
-          padding:5px;
-          background-color:white;
-          box-shadow:0 2px 8px rgba(0,0,0,0.2);
-          border-radius:8px;
-          z-index:9999;">
+      <!-- Member Tooltip (JS will populate content) -->
+      <div id="member-tooltip" role="tooltip" style="display:none;">
+        <img src="" alt="" />
+        <div></div>
       </div>
 
     </div>

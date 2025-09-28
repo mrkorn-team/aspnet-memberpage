@@ -21,6 +21,7 @@ class MembersIndex {
     this.users = await this.fetchUsers();
 
     this.createTooltip();
+    this.initCustomSelect(this.pageSizeSelect); // integrate custom select
     this.renderPage();
 
     this.pageSizeSelect.addEventListener("change", () => {
@@ -138,7 +139,6 @@ class MembersIndex {
     let fadeOutTimeout = null;
 
     imgs.forEach(img => {
-      // Add ARIA attribute
       img.setAttribute('aria-describedby', 'member-tooltip');
       img.setAttribute('tabindex', '0'); // allow keyboard focus
 
@@ -172,10 +172,8 @@ class MembersIndex {
 
       img.addEventListener('mouseenter', showTooltip);
       img.addEventListener('mouseleave', hideTooltip);
-
-      img.addEventListener('focus', showTooltip);   // keyboard focus
-      img.addEventListener('blur', hideTooltip);    // keyboard blur
-
+      img.addEventListener('focus', showTooltip);
+      img.addEventListener('blur', hideTooltip);
       img.addEventListener('mousemove', (e) => {
         if (fadeOutTimeout) {
           clearTimeout(fadeOutTimeout);
@@ -206,6 +204,87 @@ class MembersIndex {
 
     this.tooltipDiv.style.left = left + 'px';
     this.tooltipDiv.style.top = top + 'px';
+  }
+
+  // =======================
+  // Custom Select Integration
+  // =======================
+  initCustomSelect(selectEl) {
+    const options = Array.from(selectEl.options);
+    const container = document.createElement('div');
+    container.className = 'custom-select';
+
+    const toggle = document.createElement('div');
+    toggle.className = 'custom-select-toggle';
+    toggle.tabIndex = 0;
+
+    const dropdown = document.createElement('div');
+    dropdown.className = 'custom-select-dropdown';
+
+    container.appendChild(toggle);
+    container.appendChild(dropdown);
+    selectEl.style.display = 'none';
+    selectEl.parentNode.insertBefore(container, selectEl);
+
+    const buildOptions = () => {
+      dropdown.innerHTML = '';
+      options.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'custom-select-option';
+        div.textContent = opt.textContent;
+        if (opt.selected) div.classList.add('selected');
+
+        div.tabIndex = 0;
+        div.addEventListener('click', () => selectOption(opt, div));
+        div.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectOption(opt, div);
+          }
+        });
+
+        dropdown.appendChild(div);
+      });
+    };
+
+    const updateToggle = () => {
+      const selected = options.find(o => o.selected);
+      toggle.textContent = selected ? selected.textContent : 'Select...';
+    };
+
+    const selectOption = (opt, div) => {
+      options.forEach(o => o.selected = false);
+      opt.selected = true;
+      dropdown.querySelectorAll('.custom-select-option').forEach(d => d.classList.remove('selected'));
+      div.classList.add('selected');
+      updateToggle();
+      container.classList.remove('open');
+      selectEl.dispatchEvent(new Event('change'));
+    };
+
+    toggle.addEventListener('click', e => {
+      e.stopPropagation();
+      container.classList.toggle('open');
+    });
+
+    toggle.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        container.classList.toggle('open');
+        const firstOption = dropdown.querySelector('.custom-select-option');
+        firstOption && firstOption.focus();
+      }
+      if (e.key === 'Escape') {
+        container.classList.remove('open');
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!container.contains(e.target)) container.classList.remove('open');
+    });
+
+    buildOptions();
+    updateToggle();
   }
 }
 
