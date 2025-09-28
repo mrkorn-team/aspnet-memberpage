@@ -49,6 +49,8 @@
 /* === Tooltip for member pictures === */
 #member-tooltip {
   position: absolute;
+  top: -9999px; /* move far offscreen initially */
+  left: -9999px;
   z-index: 9999;
   padding: .5rem;
   border-radius: .5rem;
