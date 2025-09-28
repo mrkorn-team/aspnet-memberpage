@@ -34,7 +34,7 @@ class MembersIndex {
     try {
       const res = await fetch('/api/members');
       const data = await res.json();
-      return data; // assumes API returns array of users
+      return data; // expects array of users
     } catch (err) {
       console.error(err);
       return [];
@@ -52,7 +52,7 @@ class MembersIndex {
 
   renderRows(users) {
     this.tableBody.innerHTML = '';
-    users.forEach((u) => {
+    users.forEach(u => {
       const tr = document.createElement('tr');
 
       tr.innerHTML = `
@@ -85,7 +85,7 @@ class MembersIndex {
     const createPageItem = (text, page, disabled = false, active = false) => {
       const li = document.createElement('li');
       li.className = `page-item ${active ? 'active' : ''} ${disabled ? 'disabled' : ''}`;
-      li.innerHTML = `<a class="page-link" href="#">${text}</a>`;
+      li.innerHTML = `<a class="page-link" href="#"><span>${text}</span></a>`;
       if (!disabled) {
         li.addEventListener('click', e => {
           e.preventDefault();
