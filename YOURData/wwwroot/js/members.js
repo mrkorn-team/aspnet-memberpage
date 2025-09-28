@@ -114,14 +114,7 @@ class MembersIndex {
   createTooltip() {
     if (!this.tooltipDiv) {
       this.tooltipDiv = document.createElement('div');
-      this.tooltipDiv.style.position = 'absolute';
-      this.tooltipDiv.style.background = 'white';
-      this.tooltipDiv.style.border = '1px solid #ccc';
-      this.tooltipDiv.style.borderRadius = '8px';
-      this.tooltipDiv.style.padding = '5px';
-      this.tooltipDiv.style.display = 'none';
-      this.tooltipDiv.style.zIndex = 9999;
-      this.tooltipDiv.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+      this.tooltipDiv.id = 'member-tooltip';
       document.body.appendChild(this.tooltipDiv);
     }
   }
@@ -129,7 +122,7 @@ class MembersIndex {
   addHoverTooltip() {
     const imgs = document.querySelectorAll("#members-table-body img");
     imgs.forEach(img => {
-      img.addEventListener('mouseenter', () => {
+      img.addEventListener('mouseenter', e => {
         const src = img.dataset.picture;
         const name = img.dataset.name;
 
@@ -137,21 +130,24 @@ class MembersIndex {
         const maxTooltipWidth = cardRect.width - 20;
         const maxTooltipHeight = Math.min(cardRect.height - 20, 150);
 
-        // Tooltip content
         this.tooltipDiv.innerHTML = `
-                <img src="${src}" 
-                     style="
-                        max-width:${maxTooltipWidth}px; 
-                        max-height:${maxTooltipHeight}px; 
-                        object-fit:cover; 
-                        border-radius:8px;">
-                <div style="text-align:center; margin-top:5px;">${name}</div>
-            `;
-        this.tooltipDiv.style.display = 'block';
+          <img src="${src}" 
+               style="
+                   max-width:${maxTooltipWidth}px; 
+                   max-height:${maxTooltipHeight}px; 
+                   object-fit:cover; 
+                   border-radius:8px;">
+          <div style="text-align:center; margin-top:5px;">${name}</div>
+        `;
+
+        this.tooltipDiv.style.left = e.pageX + 10 + 'px';
+        this.tooltipDiv.style.top = e.pageY + 10 + 'px';
+
+        this.tooltipDiv.classList.add('show');
       });
 
       img.addEventListener('mouseleave', () => {
-        this.tooltipDiv.style.display = 'none';
+        this.tooltipDiv.classList.remove('show');
       });
 
       img.addEventListener('mousemove', e => {

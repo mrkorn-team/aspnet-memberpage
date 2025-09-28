@@ -10,14 +10,14 @@
   scrollbar-color: #aaa #f0f0f0; /* Firefox */
 }
 
-  #members-table-wrapper::-webkit-scrollbar {
-    width: 8px;
-  }
+#members-table-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
 
-  #members-table-wrapper::-webkit-scrollbar-thumb {
-    background-color: #aaa;
-    border-radius: 4px;
-  }
+#members-table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
+}
 
 /* Card wrapper for members table */
 .members-card {
@@ -61,3 +61,24 @@
 #members-table-header th:nth-child(n+2) {
   vertical-align: middle;
 }
+
+/* Tooltip for member pictures */
+#member-tooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 5px;
+  display: none;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  pointer-events: none; /* avoids blocking mouse events */
+  transition: opacity 0.15s ease-in-out;
+  opacity: 0;
+}
+
+#member-tooltip.show {
+  display: block;
+  opacity: 1;
+}
+
