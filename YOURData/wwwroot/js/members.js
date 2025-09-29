@@ -59,13 +59,13 @@ class MembersIndex {
 
       tr.innerHTML = `
         <td class="text-center">
-            <img src="${u.picture}" 
-                 alt="${u.name}" 
-                 class="rounded-circle" 
-                 width="32" height="32" 
+            <img src="${u.pictureUrl}"
+                 alt="${u.name}"
+                 class="rounded-circle"
+                 width="32" height="32"
                  style="cursor:pointer; object-fit:cover;"
-                 data-name="${u.name}" 
-                 data-picture="${u.picture}">
+                 data-name="${u.name}"
+                 data-pictureurl="${u.pictureUrl}">
         </td>
         <td class="align-middle">${u.name || ''}</td>
         <td class="align-middle"><a href="/Members/Edit/${u.id}">Edit</a></td>
@@ -73,7 +73,7 @@ class MembersIndex {
       this.tableBody.appendChild(tr);
 
       // Preload big photo for smooth hover
-      new Image().src = u.picture;
+      new Image().src = u.pictureUrl;
     });
 
     this.addHoverTooltip();
@@ -145,7 +145,7 @@ class MembersIndex {
       img.setAttribute("tabindex", "0"); // keyboard focus
 
       const showTooltip = (e) => {
-        const src = img.dataset.picture;
+        const src = img.dataset.pictureurl;
         const name = img.dataset.name;
 
         const cardRect = this.card.getBoundingClientRect();

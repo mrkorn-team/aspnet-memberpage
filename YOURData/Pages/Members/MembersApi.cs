@@ -14,7 +14,7 @@ public static partial class MembersApi
     app.MapGet("/api/members", async (AppDbContext db) =>
     {
       var users = await db.Users
-        .Select(u => new { u.Id, u.Name, u.Picture })
+        .Select(u => new { u.Id, u.Name, u.PictureUrl })
         .ToListAsync();
       return Results.Ok(users);  // returns an array of user objects
     });
