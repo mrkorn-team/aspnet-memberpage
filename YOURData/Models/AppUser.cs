@@ -6,7 +6,7 @@ public class AppUser
 {
   public Guid Id { get; set; }
   public string? Name { get; set; }
-  public string Picture { get; set; } = string.Empty;
+  public string PictureUrl { get; set; } = string.Empty;
 }
 
 public class AppDbContext : DbContext
@@ -28,9 +28,9 @@ public static class AppDbContextService
     using (var db = scope.ServiceProvider.GetRequiredService<TDbContext>())
     {
       var items = new AppUser[] {
-        new AppUser{ Name="Alex", Picture="/$dev/admin/dist/assets/img/k1.jpg" },
-        new AppUser{ Name="Bella", Picture="/$dev/admin/dist/assets/img/k2.jpg" },
-        new AppUser{ Name="Chalie", Picture="/$dev/admin/dist/assets/img/bg1.jpg" },
+        new AppUser{ Name="Alex", PictureUrl="/$dev/admin/dist/assets/img/k1.jpg" },
+        new AppUser{ Name="Bella", PictureUrl="/$dev/admin/dist/assets/img/k2.jpg" },
+        new AppUser{ Name="Chalie", PictureUrl="/$dev/admin/dist/assets/img/bg1.jpg" },
       };
       db.Users.AddRange(items);
       db.SaveChanges();
