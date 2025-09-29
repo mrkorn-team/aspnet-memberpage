@@ -1,0 +1,60 @@
+/* wwwroot/css/member-edit.css */
+
+.member-row {
+    position: relative;
+}
+
+/* Avatar default */
+.member-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+/* Avatar in edit mode (bigger, but row height preserved) */
+.member-row.editing .member-avatar.editing {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    transform: translateY(-8px); /* keeps row height stable */
+    z-index: 1;
+}
+
+/* Name field */
+.member-name {
+    border: none;
+    background: transparent;
+    width: 100%;
+    padding: 2px 4px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.member-row.editing .member-name {
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+/* Button alignment */
+.edit-btn,
+.save-btn,
+.cancel-btn {
+    margin-left: 4px;
+}
+
+/* Drag-over feedback */
+.member-row.editing.dragover {
+    outline: 2px dashed #0d6efd;
+    outline-offset: -4px;
+    background-color: rgba(13, 110, 253, 0.05);
+    transition: background-color 0.2s ease;
+}
+
+/* Tooltip image */
+.tooltip-inner img {
+    max-width: 150px;
+    height: auto;
+}
