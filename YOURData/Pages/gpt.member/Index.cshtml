@@ -1,0 +1,28 @@
+@page
+@model YOURData.Pages.Members.IndexModel
+@{
+  ViewData["Title"] = "Members";
+}
+
+<h2>Members</h2>
+
+<table class="table table-striped" id="members-table">
+  <thead>
+    <tr>
+      <th>Photo</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- rows will be dynamically inserted by member-edit.js -->
+  </tbody>
+</table>
+
+@section Scripts {
+  <script src="~/gpt/editlist/editlist.js" asp-append-version="true"></script>
+}
+@section Styles {
+  <link href="~/gpt/editlist/editlist.css" rel="stylesheet" asp-append-version="true" />
+}
