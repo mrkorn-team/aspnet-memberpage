@@ -11,7 +11,6 @@
     <tr>
       <th>Photo</th>
       <th>Email</th>
-      <th>Name</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -20,12 +19,11 @@
     {
       <tr class="member-row" data-user-id="@user.Id">
         <td>
-          <img src="@user.PictureUrl" alt="@user.Name" class="member-avatar" />
+          <img src="@user.PictureUrl" alt="@user.Email" class="member-avatar" />
         </td>
         <td>
-          <input type="text" value="@user.Name" readonly class="member-name form-control form-control-sm" />
+          <input type="text" value="@user.Email" readonly class="member-email form-control form-control-sm" />
         </td>
-        <td>@user.Email</td>
         <td>
           <button type="button" class="btn btn-sm btn-primary edit-btn">Edit</button>
           <button type="button" class="btn btn-sm btn-success save-btn d-none">Save</button>

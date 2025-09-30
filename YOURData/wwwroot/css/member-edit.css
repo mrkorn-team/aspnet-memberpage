@@ -24,7 +24,7 @@
 }
 
 /* Name field */
-.member-name {
+.member-email {
     border: none;
     background: transparent;
     width: 100%;
@@ -32,7 +32,7 @@
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.member-row.editing .member-name {
+.member-row.editing .member-email {
     border: 1px solid #dee2e6;
     background-color: #fff;
     border-radius: 4px;

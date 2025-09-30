@@ -11,14 +11,13 @@ public static partial class Extension
     app.MapGet("/api/members", async (AppDbContext db) =>
     {
       var users = await db.Users
-        .Select(u => new { u.Id, u.Email, u.Name, u.PictureUrl })
+        .Select(u => new { id = u.Id, email = u.Email, pictureUrl = u.PictureUrl })
         .ToListAsync();
       return Results.Ok(users);  // returns an array of user objects
     });
 
     // In Program.cs after builder and app creation and DbContext registered:
-
-    app.MapPost("/members/edit", async (HttpRequest request, AppDbContext db, IWebHostEnvironment env) =>
+    app.MapPost("/api/members/edit", async (HttpRequest request, AppDbContext db, IWebHostEnvironment env) =>
     {
       if (!request.HasFormContentType)
         return Results.BadRequest(new { error = "Invalid content type; expected multipart/form-data." });
@@ -60,7 +59,7 @@ public static partial class Extension
         user.PictureUrl = result.RelativePath ?? user.PictureUrl;
       }
 
-      user.Name = name;
+      user.Email = name;
       try
       {
         await db.SaveChangesAsync();
@@ -83,7 +82,7 @@ public static partial class Extension
          );
       }
 
-      return Results.Json(new { name = user.Name, pictureUrl = user.PictureUrl });
+      return Results.Json(new { name = user.Email, pictureUrl = user.PictureUrl });
     });
 
   }
