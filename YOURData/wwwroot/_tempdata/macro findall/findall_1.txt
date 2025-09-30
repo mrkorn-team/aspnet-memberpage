@@ -1,0 +1,74 @@
+using EnvDTE;
+using EnvDTE80;
+using System;
+using System.Windows.Forms;
+
+public static class FindState
+{
+    public static string LastSearchTerm = null;
+}
+
+public class C : VisualCommanderExt.ICommand
+{
+    public void Run(DTE2 DTE, Microsoft.VisualStudio.Shell.Package package)
+    {
+        Document doc = DTE.ActiveDocument;
+        if (doc == null) return;
+
+        TextSelection sel = doc.Selection as TextSelection;
+
+        // Detect if Shift is pressed (Ctrl+Alt+Shift+F case)
+        bool shiftPressed = (Control.ModifierKeys & Keys.Shift) == Keys.Shift;
+
+        if (!shiftPressed || sel == null || sel.IsEmpty)
+        {
+            // --- Normal mode: Find All in Current Document ---
+            string textToFind = "";
+            if (sel != null && !sel.IsEmpty)
+                textToFind = sel.Text;
+            else
+                textToFind = DTE.Find.FindWhat;
+
+            if (string.IsNullOrEmpty(textToFind))
+                return;
+
+            FindState.LastSearchTerm = textToFind;
+
+            // Put text into Find What
+            DTE.Find.FindWhat = textToFind;
+
+            // Open Find in Files dialog (Ctrl+Shift+F equivalent)
+            DTE.ExecuteCommand("Edit.FindInFiles");
+            
+            // Execute Find All
+            SendKeys.SendWait("{ENTER}");
+        }
+        else
+        {
+            // --- Shift mode: Find All in Selection ---
+            if (sel == null || sel.IsEmpty) return;
+            string searchText = FindState.LastSearchTerm;
+            if (string.IsNullOrEmpty(searchText)) return;
+
+            string selectedText = sel.Text;
+
+            // Copy selection into temp doc
+            DTE.ItemOperations.NewFile("General\\Text File", "TempSearch.txt", Constants.vsViewKindTextView);
+            Document tempDoc = DTE.ActiveDocument;
+            TextSelection tempSel = (TextSelection)tempDoc.Selection;
+            tempSel.Insert(selectedText);
+
+            // Put search text
+            DTE.Find.FindWhat = searchText;
+
+            // Open Find in Files dialog
+            DTE.ExecuteCommand("Edit.FindInFiles");
+            
+            // Execute Find All
+            SendKeys.SendWait("{ENTER}");
+
+            // Close temp doc without saving
+            tempDoc.Close(vsSaveChanges.vsSaveChangesNo);
+        }
+    }
+}

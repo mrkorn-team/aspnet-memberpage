@@ -1,0 +1,81 @@
+using System;
+using System.Reflection.Metadata;
+using System.Windows.Forms;
+using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualBasic;
+
+public static class FindState
+{
+  public static string LastSearchTerm = null;
+}
+
+public class CustomFindAll : VisualCommanderExt.ICommand
+{
+  public void Run(DTE2 DTE, Microsoft.VisualStudio.Shell.Package package)
+  {
+    Document doc = DTE.ActiveDocument;
+    if (doc == null)
+      return;
+
+    TextSelection sel = doc.Selection as TextSelection;
+    if (sel == null)
+      return;
+
+    string textToFind = "";
+    bool oneword = false;
+
+    // --- Determine search term ---
+    if (!sel.IsEmpty)
+    {
+      textToFind = sel.Text.Trim();
+
+      // Detect if selection is a single word
+      //string[] tokens = textToFind.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+      //if (tokens.Length == 1)
+      //  oneword = true;
+    }
+    else
+    {
+      // No selection → get word under cursor
+      //textToFind = WordHelper.GetWordUnderCursor(sel);
+      textToFind = DTE.Find.FindWhat;
+      //oneword = true; // single word
+    }
+
+    if (string.IsNullOrEmpty(textToFind))
+      return;
+
+    FindState.LastSearchTerm = textToFind;
+
+    bool useSelection = !sel.IsEmpty;
+
+    if (!useSelection || oneword)
+    {
+      // --- Find All in Current Document ---
+      DTE.Find.FindWhat = textToFind;
+
+      // Open Find in Files dialog and execute Find All
+      DTE.ExecuteCommand("Edit.FindInFiles");
+      SendKeys.SendWait("{ENTER}");
+    }
+    else
+    {
+      // --- Find All in Selection ---
+      string selectedText = sel.Text;
+
+      // Create temporary document to perform Find All
+      DTE.ItemOperations.NewFile("General\\Text File", "TempSearch.txt", Constants.vsViewKindTextView);
+      Document tempDoc = DTE.ActiveDocument;
+      TextSelection tempSel = (TextSelection)tempDoc.Selection;
+      tempSel.Insert(selectedText);
+
+      DTE.Find.FindWhat = textToFind;
+      DTE.ExecuteCommand("Edit.FindInFiles");
+      SendKeys.SendWait("{ENTER}");
+
+      // Close temporary document without saving
+      tempDoc.Close(vsSaveChanges.vsSaveChangesNo);
+    }
+  }
+}
