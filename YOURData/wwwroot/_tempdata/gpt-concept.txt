@@ -1,16 +1,3 @@
-Hello, I would like to work with you to finished my aspnet-memberpage project.
-
-=== Description ===
-
-- Project public share links --> https://github.com/mrkorn-team/aspnet-memberpage
-- We will create members/index.cshtml page model to list users(listmode) and able to be edited(editmode) in same page.
-- listmode -> show edit btn-link
-- editmode -> show save and cancel btn-link (after user click edit btn)
-
-
-* Review the summary of our design idea before writing code.
-
-
 === Coding requirement ===
 
 - asp.net9.0.9 + razor page style
@@ -19,7 +6,37 @@ Hello, I would like to work with you to finished my aspnet-memberpage project.
 - ajax/fetch() + mapping endpoints (app.mappost(), app.mapget()) to avoid page reload flickering.
 - fully nullable enabled c#.
 - separate js scripts and css from view page to be class --> member-edit.js and member-edit.css.
+- implement .js and .css in the very bottom of index.cshtml like this
+ @section Scripts { <script src="~/js/member.js" asp-append-version="true"></script> }
+ @section Styles { <link href="~/css/member.css" asp-append-version="true" rel="stylesheet" /> }
 
+==========================================
 
-=== Optional ===
-- implement .js and .css in the very bottom of index.cshtml like this @section Scripts { <script src="~/js/members.js" asp-append-version="true"></script> } @section Styles { <link href="~/css/members.css" asp-append-version="true" rel="stylesheet" /> }
+Hello, would you help me expand user index page to have editable feature in the same page, please?
+
+*** Goal ***
+- User click edit -> replace edit with save | cancel.
+- Click photo icon -> allow user to browse new image file (.jpg, .png, etc..) -> refresh photo for review.
+- User can drop image file in to any area in their row -> refresh photo for review..
+- User can browse or drop image file multiple times before click save.
+- After click save
+   : validate image file size > 5MB = reject + alert user.
+   : if image dimension height < 160px = reject + alert user.
+   : if image ratio (w:h) > 6.0f --> trim left - right to make ratio 6.0f maximum.
+   : resize image to height 160px maintain image ratio.
+   : convert image to jpg + compress image file 80% + fill background white.
+   : save jpg image file to "wwwroot/appdata/member/picture/{guid}.jpg"
+   : update user new email and new jpg file name ({guid}.jpg w/o path) to database (AppDbContext -> db.Users)
+   : delete old user image file if exists (known old image file name from db.Users)
+   : if user click cancel --> reverse back all email and photo.
+   : extra css on edit mode --> make user photo larger 48x48px center-vertical in their row + maintain row height (you have to adjust img or tr/td padding or what ever to maintain row height not different than other normal row)
+- I have ImageHelper class to support this for you, please review if it could use to implement immedietly.
+
+*** I would like you help apply the change to these source files and send the update to me. ***
+- https://github.com/mrkorn-team/aspnet-memberpage/blob/feature/edit-index/YOURData/Helper/ImageHelper.cs
+- https://github.com/mrkorn-team/aspnet-memberpage/blob/feature/edit-index/YOURData/Pages/Member/Index.cshtml
+- https://github.com/mrkorn-team/aspnet-memberpage/blob/feature/edit-index/YOURData/Pages/Member/Endpoints.cs
+- https://github.com/mrkorn-team/aspnet-memberpage/blob/feature/edit-index/YOURData/wwwroot/js/member.js
+- https://github.com/mrkorn-team/aspnet-memberpage/blob/feature/edit-index/YOURData/Models/AppUser.cs
+
+ps: After you finished the design we would review concept and finalize all questions 'n discussion before start coding.
