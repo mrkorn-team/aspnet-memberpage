@@ -8,7 +8,7 @@ public static partial class Extension
   public static void MapEndpoints(this WebApplication app)
   {
     // API endpoint to get all users
-    app.MapGet("/api/members", async (AppDbContext db) =>
+    app.MapGet("/api/member/list", async (AppDbContext db) =>
     {
       var users = await db.Users
         .Select(u => new { id = u.Id, email = u.Email, pictureUrl = u.PictureUrl })
@@ -17,7 +17,7 @@ public static partial class Extension
     });
 
     // In Program.cs after builder and app creation and DbContext registered:
-    app.MapPost("/api/members/edit", async (HttpRequest request, AppDbContext db, IWebHostEnvironment env) =>
+    app.MapPost("/api/member/edit", async (HttpRequest request, AppDbContext db, IWebHostEnvironment env) =>
     {
       if (!request.HasFormContentType)
         return Results.BadRequest(new { error = "Invalid content type; expected multipart/form-data." });
@@ -30,10 +30,10 @@ public static partial class Extension
         return Results.BadRequest(new { error = "Missing or invalid Id." });
       }
 
-      var name = form["Name"].ToString().Trim();
-      if (string.IsNullOrWhiteSpace(name))
+      var email = form["Email"].ToString().Trim();
+      if (string.IsNullOrWhiteSpace(email))
       {
-        return Results.BadRequest(new { error = "Name is required." });
+        return Results.BadRequest(new { error = "Email is required." });
       }
 
       var user = await db.Set<AppUser>().FindAsync(id);
@@ -59,7 +59,7 @@ public static partial class Extension
         user.PictureUrl = result.RelativePath ?? user.PictureUrl;
       }
 
-      user.Email = name;
+      user.Email = email;
       try
       {
         await db.SaveChangesAsync();
@@ -82,7 +82,7 @@ public static partial class Extension
          );
       }
 
-      return Results.Json(new { name = user.Email, pictureUrl = user.PictureUrl });
+      return Results.Json(new { email = user.Email, pictureUrl = user.PictureUrl });
     });
 
   }

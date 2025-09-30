@@ -33,7 +33,7 @@ class MembersIndex {
 
   async fetchUsers() {
     try {
-      const res = await fetch('/api/members');
+      const res = await fetch('/api/member/list');
       const data = await res.json();
       return data; // expects array of users
     } catch (err) {
@@ -68,7 +68,7 @@ class MembersIndex {
                  data-pictureurl="${u.pictureUrl}">
         </td>
         <td class="align-middle">${u.email || ''}</td>
-        <td class="align-middle"><a href="/Members/Edit/${u.id}">Edit</a></td>
+        <td class="align-middle"><a href="/Member/Edit/${u.id}">Edit</a></td>
       `;
       this.tableBody.appendChild(tr);
 
