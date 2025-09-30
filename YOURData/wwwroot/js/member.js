@@ -67,6 +67,7 @@ class MembersIndex {
                  data-name="${u.name}"
                  data-pictureurl="${u.pictureUrl}">
         </td>
+        <td class="align-middle">${u.email || ''}</td>
         <td class="align-middle">${u.name || ''}</td>
         <td class="align-middle"><a href="/Members/Edit/${u.id}">Edit</a></td>
       `;

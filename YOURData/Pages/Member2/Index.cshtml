@@ -1,0 +1,45 @@
+@page
+@model IndexModel
+@{
+  ViewData["Title"] = "Members";
+}
+
+<h2>Members</h2>
+
+<table class="table table-striped" id="members-table-body">
+  <thead>
+    <tr>
+      <th>Photo</th>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @* @foreach (var user in Model.Users)
+    {
+      <tr class="member-row" data-user-id="@user.Id">
+        <td>
+          <img src="@user.PictureUrl" alt="@user.Name" class="member-avatar" />
+        </td>
+        <td>
+          <input type="text" value="@user.Name" readonly class="member-name form-control form-control-sm" />
+        </td>
+        <td>@user.Email</td>
+        <td>
+          <button type="button" class="btn btn-sm btn-primary edit-btn">Edit</button>
+          <button type="button" class="btn btn-sm btn-success save-btn d-none">Save</button>
+          <button type="button" class="btn btn-sm btn-secondary cancel-btn d-none">Cancel</button>
+        </td>
+      </tr>
+    } *@
+  </tbody>
+</table>
+
+@section Scripts {
+  <script src="~/js/member-edit.js" asp-append-version="true"></script>
+}
+
+@section Styles {
+  <link href="~/css/member-edit.css" asp-append-version="true" rel="stylesheet" />
+}

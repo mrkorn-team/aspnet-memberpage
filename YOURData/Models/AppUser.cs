@@ -5,6 +5,7 @@ namespace YOURData.Models;
 public class AppUser
 {
   public Guid Id { get; set; }
+  public string? Email { get; set; }
   public string? Name { get; set; }
   public string PictureUrl { get; set; } = string.Empty;
 }
@@ -27,10 +28,12 @@ public static class AppDbContextService
     using (var scope = service.CreateScope())
     using (var db = scope.ServiceProvider.GetRequiredService<TDbContext>())
     {
+      if (db.Users.Any()) return service;
+
       var items = new AppUser[] {
-        new AppUser{ Name="Alex", PictureUrl="/$dev/admin/dist/assets/img/k1.jpg" },
-        new AppUser{ Name="Bella", PictureUrl="/$dev/admin/dist/assets/img/k2.jpg" },
-        new AppUser{ Name="Chalie", PictureUrl="/$dev/admin/dist/assets/img/bg1.jpg" },
+        new AppUser{ Email="alex@example.com", Name="Alex", PictureUrl="/$dev/admin/dist/assets/img/k1.jpg" },
+        new AppUser{ Email="bella@example.com", Name="Bella", PictureUrl="/$dev/admin/dist/assets/img/k2.jpg" },
+        new AppUser{ Email="chalie@example.com", Name="Chalie", PictureUrl="/$dev/admin/dist/assets/img/bg1.jpg" },
       };
       db.Users.AddRange(items);
       db.SaveChanges();

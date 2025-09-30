@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace YOURData.Pages.gpt
+namespace YOURData.Pages.Member2
 {
     public class IndexModel : PageModel
     {

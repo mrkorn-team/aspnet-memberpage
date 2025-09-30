@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using YOURData.Models;
+using YOURData.Pages.Gpt.Member;
 
 // ===============================================
 // My razor template w/ sidebars 'n simple sign-in
@@ -47,7 +48,8 @@ app.UseAuthorization();
 app.MapRazorPages()
   .WithStaticAssets();
 
-app.MapMembersApi();
+app.MapEndpoints();
+app.MapGptEndpoints();
 
 app.Run();
 
