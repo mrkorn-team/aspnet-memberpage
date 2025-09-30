@@ -3,8 +3,10 @@ Hello, I would like to work with you to finished my aspnet-memberpage project.
 === Description ===
 
 - Project public share links --> https://github.com/mrkorn-team/aspnet-memberpage
-- We will create members/index.cshtml page model to list users (picture and name) and able to be edited in same page.
-- When user click edit --> show Save and Cancel btn-link, hide edit btn-link
+- We will create members/index.cshtml page model to list users(listmode) and able to be edited(editmode) in same page.
+- listmode -> show edit btn-link
+- editmode -> show save and cancel btn-link (after user click edit btn)
+
 
 * Review the summary of our design idea before writing code.
 
