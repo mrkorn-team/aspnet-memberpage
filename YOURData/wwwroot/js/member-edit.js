@@ -46,7 +46,7 @@
     const avatar = row.querySelector(".member-avatar");
     avatar.classList.add("editing");
 
-    const nameField = row.querySelector(".member-name");
+    const nameField = row.querySelector(".member-email");
     nameField.removeAttribute("readonly");
     nameField.focus();
 
@@ -60,11 +60,11 @@
     const avatar = row.querySelector(".member-avatar");
     avatar.classList.remove("editing");
 
-    const nameField = row.querySelector(".member-name");
-    nameField.setAttribute("readonly", "true");
+    const emailField = row.querySelector(".member-email");
+    emailField.setAttribute("readonly", "true");
 
     if (restore) {
-      nameField.value = row.dataset.originalName;
+      emailField.value = row.dataset.originalEmail;
       avatar.src = row.dataset.originalAvatar;
       refreshTooltip(avatar, row.dataset.originalAvatar);
     }
@@ -78,12 +78,12 @@
 
   async function handleSave(row) {
     const userId = row.dataset.userId;
-    const name = row.querySelector(".member-name").value.trim();
+    const email = row.querySelector(".member-email").value.trim();
     const file = row.dataset.pendingFile ? row.dataset.pendingFile : null;
 
     const formData = new FormData();
     formData.append("id", userId);
-    formData.append("name", name);
+    formData.append("email", email);
     if (file) formData.append("Picture", file);
 
     try {
@@ -91,13 +91,13 @@
       const result = await resp.json();
       if (!resp.ok) throw new Error(result.error || "Save failed.");
 
-      row.dataset.originalName = result.name;
+      row.dataset.originalEmail = result.email;
       row.dataset.originalAvatar = result.pictureUrl;
 
       const avatar = row.querySelector(".member-avatar");
       avatar.src = result.pictureUrl;
       refreshTooltip(avatar, result.pictureUrl);
-      row.querySelector(".member-name").value = result.name;
+      row.querySelector(".member-email").value = result.email;
 
       exitEditMode(row, false);
     } catch (err) {
@@ -111,9 +111,9 @@
     const editBtn = row.querySelector(".edit-btn");
     const saveBtn = row.querySelector(".save-btn");
     const cancelBtn = row.querySelector(".cancel-btn");
-    const nameField = row.querySelector(".member-name");
+    const emailField = row.querySelector(".member-email");
 
-    row.dataset.originalName = nameField.value;
+    row.dataset.originalEmail = emailField.value;
     row.dataset.originalAvatar = avatar.src;
 
     refreshTooltip(avatar, avatar.src);
@@ -166,9 +166,8 @@
     tr.dataset.userId = user.id;
 
     tr.innerHTML = `
-      <td><img src="${user.pictureUrl}" alt="${user.name}" class="member-avatar" /></td>
-      <td>${user.email}</td>
-      <td><input type="text" value="${user.name}" readonly class="member-name form-control form-control-sm" /></td>
+      <td><img src="${user.pictureUrl}" alt="${user.email}" class="member-avatar" /></td>
+      <td><input type="email" value="${user.email}" readonly class="member-email form-control form-control-sm" /></td>
       <td>
           <button type="button" class="btn btn-sm btn-primary edit-btn">Edit</button>
           <button type="button" class="btn btn-sm btn-success save-btn d-none">Save</button>

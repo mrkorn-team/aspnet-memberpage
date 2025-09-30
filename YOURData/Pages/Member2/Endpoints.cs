@@ -15,7 +15,6 @@ public static partial class Extension
           {
             id = u.Id,
             email = u.Email,
-            name = u.Name,
             pictureUrl = u.PictureUrl
           })
           .ToListAsync();

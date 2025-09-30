@@ -5,7 +5,7 @@ class MembersIndex {
 
     this.tooltipDiv = null;
     this.tooltipImg = null;
-    this.tooltipName = null;
+    this.tooltipEmail = null;
 
     this.users = [];
     this.currentPage = 1;
@@ -60,15 +60,14 @@ class MembersIndex {
       tr.innerHTML = `
         <td class="text-center">
             <img src="${u.pictureUrl}"
-                 alt="${u.name}"
+                 alt="${u.email}"
                  class="rounded-circle"
                  width="32" height="32"
                  style="cursor:pointer; object-fit:cover;"
-                 data-name="${u.name}"
+                 data-email="${u.email}"
                  data-pictureurl="${u.pictureUrl}">
         </td>
         <td class="align-middle">${u.email || ''}</td>
-        <td class="align-middle">${u.name || ''}</td>
         <td class="align-middle"><a href="/Members/Edit/${u.id}">Edit</a></td>
       `;
       this.tableBody.appendChild(tr);
@@ -130,8 +129,8 @@ class MembersIndex {
       this.tooltipImg = document.createElement('img');
       this.tooltipDiv.appendChild(this.tooltipImg);
 
-      this.tooltipName = document.createElement('div');
-      this.tooltipDiv.appendChild(this.tooltipName);
+      this.tooltipEmail = document.createElement('div');
+      this.tooltipDiv.appendChild(this.tooltipEmail);
 
       document.body.appendChild(this.tooltipDiv);
     }
@@ -147,7 +146,7 @@ class MembersIndex {
 
       const showTooltip = (e) => {
         const src = img.dataset.pictureurl;
-        const name = img.dataset.name;
+        const email = img.dataset.email;
 
         const cardRect = this.card.getBoundingClientRect();
         const maxTooltipWidth = cardRect.width - 20;
@@ -161,7 +160,7 @@ class MembersIndex {
         this.tooltipImg.src = src;
         this.tooltipImg.style.maxWidth = maxTooltipWidth + 'px';
         this.tooltipImg.style.maxHeight = maxTooltipHeight + 'px';
-        this.tooltipName.textContent = name;
+        this.tooltipEmail.textContent = email;
 
         this.positionTooltip(e);
         this.tooltipDiv.classList.add('show');
